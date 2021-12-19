@@ -7,7 +7,6 @@ from django import forms
 from datetime import datetime
 import auctions
 
-from commerce.settings import MEDIA_URL
 from .models import User, Auction,Bids,Comments,categories
 
 class Auctions(forms.ModelForm):
@@ -18,7 +17,7 @@ class Auctions(forms.ModelForm):
             'author': forms.HiddenInput(attrs={'value':'1'}),
             'title' : forms.TextInput( attrs={'class':'form-input'}),
             'categorie' : forms.Select( attrs={'class' : 'form-input'}),
-            'image' : forms.FileInput( attrs={'class' : 'form-input'}),
+            'image' : forms.TextInput( attrs={'placeholder':'Insert Url','class' : 'form-input'}),
             'bid' : forms.NumberInput(attrs={'class':'form-input','min':1,'max': 999999999}),
             'description' : forms.Textarea( attrs={'class':'form-input'}),
         }
@@ -26,7 +25,7 @@ class Auctions(forms.ModelForm):
 def index(request):
     image = None
     if request.method == "POST":
-         form = Auctions(request.POST,request.FILES)
+         form = Auctions(request.POST)
          form.save()
          temp = Auction.objects.all().last()
          temp.author = User.objects.get(pk = request.user.pk)
@@ -43,7 +42,6 @@ def index(request):
     return render(request, "auctions/index.html",{
         'title' : "Active Listings",
         'auction': stuffs,
-        'media_url' : MEDIA_URL,
         'path':'index',
     })
 
@@ -121,7 +119,6 @@ def listing_page(request,id):
 
     return render(request,'auctions/listing_page.html',{
         'auction':Auction.objects.get(pk=id),
-        'media_url' : MEDIA_URL,
         'message':message,
         'comments':Comments.objects.filter(stuff = id),
         'in_watchlist':Auction.objects.get(pk=id).watchlist.filter(pk = request.user.pk).exists(),
@@ -131,12 +128,14 @@ def listing_page(request,id):
 def add_to_watchlist(request,id):
     stuff = Auction.objects.get(pk = id)
     stuff.watchlist.add(request.user)
-
+    if (request.GET['next'] == 'index'):
+        return HttpResponseRedirect("/")
     return  HttpResponseRedirect(f"/{request.GET['next']}/")
 
 def remove_from_watchlist(request,id):
     Auction.objects.get(pk = id).watchlist.remove(request.user)
-
+    if (request.GET['next'] == 'index'):
+        return HttpResponseRedirect("/")
     return  HttpResponseRedirect(f"/{request.GET['next']}/")
 
 def watchlist_view(request):
@@ -152,7 +151,6 @@ def watchlist_view(request):
     return render(request, "auctions/index.html",{
         'title' : "Watchlist",
         'auction': stuffs,
-        'media_url' : MEDIA_URL,
         'path':'watchlist'
     })
 
@@ -161,7 +159,6 @@ def add_bid(request):
     if (int(request.POST['amount']) <= current_stuff.bid):
         return render(request,'auctions/listing_page.html',{
             'auction':Auction.objects.get(pk=request.POST['pk']),
-            'media_url' : MEDIA_URL,
             'error' : "You have to bid more than £" + str(current_stuff.bid) + ".00"
         })
 
@@ -173,7 +170,6 @@ def add_bid(request):
 
     return render(request,'auctions/listing_page.html',{
         'auction':Auction.objects.get(pk=request.POST['pk']),
-        'media_url' : MEDIA_URL,
         'success' : "Your bid was successful"
     })
 
@@ -215,7 +211,6 @@ def  categories_view(request,category):
     return render(request,'auctions/categories.html',{
         'title' : f"{category} Listings",
         'auction': stuffs,
-        'media_url' : MEDIA_URL,
         'path':f'categories/{category}',
     })
 
@@ -231,6 +226,5 @@ def my_listing_view(request):
     return render(request, "auctions/index.html",{
             'title' : "My Listings",
             'auction': stuffs,
-            'media_url' : MEDIA_URL,
             'path':'index',
     })

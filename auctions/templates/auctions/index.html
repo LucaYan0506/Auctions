@@ -11,11 +11,7 @@
                     {% endif %}
                 </h1>
                 <div style="height: 200px;">
-                    {% if n.image %}
-                        <img src="{{ media_url }}{{n.image}}"/>
-                    {% else %}
-                        <img src="{{ media_url }}/image/no_image.png"/>
-                    {% endif %}
+                    <img id="img" src="{{n.image}}" onerror="standby(this)"/>
                 </div>
                 <p>Current bid: £{{ n.bid }}.00</p>
                 <h5 style="margin-bottom:0px;">Description</h5>

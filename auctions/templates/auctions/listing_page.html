@@ -29,11 +29,7 @@
     </h1>
         <div style="border: 1px solid rgba(0,0,0,.125);background-color: white;padding:25px 25px;margin-right: 10px;">
             <div id="img-container">
-                {% if auction.image %}
-                    <img src="{{ media_url }}{{auction.image}}"/>
-                {% else %}
-                    <img src="{{ media_url }}/image/no_image.png"/>
-                {% endif %}
+                <img id="img" src="{{auction.image}}" onerror="standby()"/>
             </div>
     
             <div>

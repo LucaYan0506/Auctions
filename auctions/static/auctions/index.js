@@ -138,3 +138,7 @@ function check_input(){
     else
         btn.className = "btn";
 }
+
+function standby() {
+    document.getElementById('img').src = "../../../no_image.png"
+}

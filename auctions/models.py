@@ -17,7 +17,7 @@ class Auction(models.Model):
     author = models.ForeignKey(User, on_delete= CASCADE, default=1)
     title = models.CharField(max_length=23)
     categorie = models.ForeignKey(categories ,on_delete=models.CASCADE, default=5)
-    image = models.ImageField(blank=True,upload_to="image/")  
+    image = models.CharField(max_length=2048,blank=True)
     bid = models.IntegerField()
     description = models.TextField()
     isActive = models.BooleanField(default=True,blank=True)
