@@ -1,0 +1,10 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <form action="{% url 'index' %}" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="author" value ="{{user.pk}}">
+        {{ form.as_p }}
+        <input type="submit" value="Save" class="btn">
+    </form>
+{% endblock body %}

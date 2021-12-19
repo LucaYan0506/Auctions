@@ -1,0 +1,106 @@
+{% extends 'auctions/layout.html' %}
+
+
+{% block body %}
+    {% if error %}
+        <p class="msg" id="error">{{error}}</p>
+    {% endif %}
+    {% if success %}
+        <p class="msg" id="success">{{success}}</p>
+    {% endif %}
+    {% if message %}
+    <p class="msg" id="success">{{message}}</p>
+    {% endif %}
+    <h1>{{ auction.title }} 
+        {% if auction.isActive == False %}
+            <button class="btn disabled" disabled>Closed</button>
+            {% else %}
+                {% if user.is_authenticated %}
+                    {% if auction.author == user %}
+                        <a href="{% url 'close_auction' auction.pk %}"><button style="padding: .375rem .75rem;">Close</button></a>
+                    {% endif %}
+                {% endif %} 
+        {% endif %}
+        {% if in_watchlist %}
+            <a class="watchlist-link" id="remove-watchlist" href="{% url 'remove_from_watchlist' auction.pk %}?next={{path}}">Remove Watchlist</a>
+        {% else %}
+            <a class="watchlist-link" style="padding-left:2.2rem;padding-right:2.2rem;" href="{% url 'add_to_watchlist' auction.pk %}?next={{path}}">Add Watchlist</a>
+        {% endif %}
+    </h1>
+        <div style="border: 1px solid rgba(0,0,0,.125);background-color: white;padding:25px 25px;margin-right: 10px;">
+            <div id="img-container">
+                {% if auction.image %}
+                    <img src="{{ media_url }}{{auction.image}}"/>
+                {% else %}
+                    <img src="{{ media_url }}/image/no_image.png"/>
+                {% endif %}
+            </div>
+    
+            <div>
+                <p>Categorie: {{auction.categorie}}</p>
+                <h5 style="margin-bottom:0px;">Description</h5>
+                <p style="word-wrap:break-word">{{ auction.description }}</p>  
+                <div style="background-color:#e2e2e2;padding-left: 5px;">
+                    <p>Bid history: <a href="{% url 'bid_history' id=auction.pk %}">{{ auction.bids_set.count }}</a></p>
+                    <p>Current price: £{{ auction.bid }}.00</p>
+                    {% if auction.isActive %}
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'add_bid' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="pk" value="{{auction.pk}}">
+                                <input type="hidden" name="path" value="{{request.path}}">
+                                <label for="amount">£</label>
+                                <input type="number" name="amount" style="font-size:1rem;" placeholder="Bid Amount" required>
+                                <label for="amount">.00</label>
+                                <p style="color:#767676;margin:0;font-size:12px;">Enter more than £{{ auction.bid }}.00</p>
+                                <input type="submit" style="width:150px;margin:2px;" value="Place bid" class="btn">
+                            </form>
+                        {% else %}
+                            <a href="{% url 'login' %}?next={{request.path}}">Login</a> to bid
+                            <button disabled>Place bid</button>
+                        {% endif %}
+                    {% else %}
+                        <button class="btn disabled" style="margin-bottom:10px" disabled>Auction is closed</button>
+                    {% endif %}
+
+                    
+                </div>   
+            </div>
+
+            <div style="clear: left;"></div>
+        </div>
+
+        <div>
+            <h2>Comments</h2>
+            {% if user.is_authenticated %}
+                <form action="{% url 'add_comment' auction.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="stuff" value="{{auction.pk}}">
+                    <input id="comment-input" name="comment-input" type="text" placeholder="Add a public comment..." onkeyup="check_input()">
+                    <hr>
+                    <hr id="black-hr">
+                    <button style="float: right;margin-left: 10px;" class="btn disabled" id="Add-comment"><b>Add comment</b></button>
+                    <label style="float: right;" class="btn" onclick="clear_input()"><b>Cancel</b></label>
+                    <div style="clear:right"></div>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}?next={{request.path}}">Login</a> to comment
+            {% endif %}
+            {% if comments %}
+                <div id="comments-container">
+                    {% for comment in comments reversed %}
+                        <div style="margin-bottom:0px;">
+                            <img style="width:40px" src="https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=20&m=1223671392&s=612x612&w=0&h=lGpj2vWAI3WUT1JeJWm1PRoHT3V15_1pdcTn2szdwQ0=">
+                            <span style="position:relative;top:-10px;">
+                                <b>{{comment.author}}</b>
+                                (time: 
+                                <b>{{comment.time | date:'Y/m/d, H:i' }}</b>)
+                            </span>
+                        </div>
+                        <p>{{comment.text}}</p>
+                        <hr>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+{% endblock body %}
