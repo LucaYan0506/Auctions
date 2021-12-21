@@ -15,7 +15,7 @@
                 <span class="left" >
                     <a id="logo-img" href="{% url 'index' %}"><img style="vertical-align:middle;" src="https://cdn-icons-png.flaticon.com/512/345/345629.png" alt="icon" width="50px"/></a>
                     <a id="logo-txt" href="{% url 'index' %}"><b>Auctions</b></a>
-                    <label id="nav-link" name="categories" style="padding-bottom:20px">Categories</label>
+                    <label id="nav-link" name="categories">Categories</label>
                     {% if user.is_authenticated %}
                         <a href="{% url 'create_list' %}" id="nav-link">Create listing</a>
                     {% else %}
@@ -52,8 +52,8 @@
 
         </div>
 
-        <footer>
-            default
+        <footer style="clear:both">
+            
         </footer>
         <script src="{% static 'auctions/index.js' %}"></script>
     </body>

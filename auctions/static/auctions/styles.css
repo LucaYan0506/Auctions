@@ -1,3 +1,9 @@
+.nav-bar,footer{
+    min-width: 200px;
+}
+body{
+    background-color: whitesmoke;
+}
 .body {
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     padding: 60px;
@@ -318,7 +324,7 @@ table, td, th {
         width: 60%;
     }
     .nav-bar .right{
-        width: 12%;
+        width: 20%;
     }
     #img-container{
         float: unset;
@@ -332,7 +338,7 @@ table, td, th {
     }
   }
 
-  @media only screen and (max-width: 646px) {
+  @media only screen and (max-width: 696px) {
     .nav-bar{
         height: 200px;
     }
@@ -343,7 +349,7 @@ table, td, th {
         float: none;
         display: grid;
         text-align: left;
-        width: 80%;
+        width: calc(85% - 20px);
     }
     .nav-bar .right{
         padding-top: 0px;
