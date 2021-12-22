@@ -340,7 +340,10 @@ table, td, th {
 
   @media only screen and (max-width: 696px) {
     .nav-bar{
-        height: 200px;
+        height: 160px;
+    }
+    label[name="categories"]{
+        padding-bottom: 0px!important;
     }
     .body{
         margin-top: 200px;
@@ -356,7 +359,8 @@ table, td, th {
         margin-left: calc(10% + 20px);
     }
     .left #sub-menu{
-        top:-30px;
+        position: absolute;
+        top:120px;
         margin-left: 20px!important;
     }
     .right #sub-menu{
