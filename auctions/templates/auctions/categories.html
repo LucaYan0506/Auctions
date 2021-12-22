@@ -1,31 +1,31 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>{{title}}</h2>
+    <h1>{{title}}</h1>
     <div id="auctions-container">
         {% for n,stuff_in_watchlist in auction %}
             <div id="card">
-                <h1>{{ n.title }}
+                <h2>{{ n.title }}
                     {% if not n.isActive %}
                     <button class="btn disabled">Closed</button>
                     {% endif %}
-                </h1>
+                </h2>
                 <div style="height: 200px;">
                     <img id="img" src="{{n.image}}" onerror="standby()"/>
                 </div>
-                <p>Current bid: £{{ n.bid }}.00</p>
-                <h5 style="margin-bottom:0px;">Description</h5>
-                <textarea style="resize:none;margin-bottom:10px" cols="39" rows="4" readonly>{{ n.description }}</textarea>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'listing_page' n.pk %}" style="padding-right:3.6rem;padding-left:3.6rem;" >View</a>
-                    {% if stuff_in_watchlist %}
-                        <a id="remove-watchlist" href="{% url 'remove_from_watchlist' n.pk %}?next={{path}}&number=0">Remove Watchlist</a>
+                    <p>Current bid: £{{ n.bid }}.00</p>
+                    <h5 style="margin-bottom:0px;">Description</h5>
+                    <textarea style="resize:none;margin-bottom:10px;width:95%" cols="39" rows="4" readonly>{{ n.description }}</textarea>
+                    {% if user.is_authenticated %}
+                        {% if stuff_in_watchlist %}
+                            <a id="remove-watchlist" href="{% url 'remove_from_watchlist' n.pk %}?next={{path}}&number=0">Remove Watchlist</a>
+                        {% else %}
+                            <a href="{% url 'add_to_watchlist' n.pk %}?next={{path}}&number=0">Add Watchlist</a>
+                        {% endif %}
+                        <a href="{% url 'listing_page' n.pk %}">View</a>
                     {% else %}
-                        <a style="padding-left:2.2rem;padding-right:2.2rem;" href="{% url 'add_to_watchlist' n.pk %}?next={{path}}&number=0">Add Watchlist</a>
+                        <a href="{% url 'listing_page' n.pk %}" style="padding-top:10px;padding-bottom:10px">View</a>
                     {% endif %}
-                {% else %}
-                    <a href="{% url 'listing_page' n.pk %}" style="padding-left:150px;padding-right:150px" >View</a>
-                {% endif %}
             </div>
         {% endfor %}
         <div style="clear:left">
