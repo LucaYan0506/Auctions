@@ -133,7 +133,7 @@ strong[name="user-name"]{
 
 .form-input{
     display: block;
-    width: min(100%,560px);
+    width: min(90%,560px);
     padding: .375rem .75rem;
     font-size: 1rem;
     color: #495057;
@@ -168,7 +168,7 @@ strong[name="user-name"]{
 }
 
 #id_categorie{
-    width: min(586px,110%);
+    width: min(586px,100%);
 }
 
 #card{
