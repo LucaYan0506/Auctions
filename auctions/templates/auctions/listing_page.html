@@ -21,11 +21,16 @@
                     {% endif %}
                 {% endif %} 
         {% endif %}
-        {% if in_watchlist %}
-            <a class="watchlist-link" id="remove-watchlist" style="padding-left:2.2rem;padding-right:2.2rem;width:auto;" href="{% url 'remove_from_watchlist' auction.pk %}?next={{path}}">Remove Watchlist</a>
+        {% if user.is_authenticated %}
+            {% if in_watchlist %}
+                <a class="watchlist-link" id="remove-watchlist" style="padding-left:2.2rem;padding-right:2.2rem;width:auto;" href="{% url 'remove_from_watchlist' auction.pk %}?next={{path}}">Remove Watchlist</a>
+            {% else %}
+                <a class="watchlist-link" style="padding-left:2.2rem;padding-right:2.2rem;width:auto;" href="{% url 'add_to_watchlist' auction.pk %}?next={{path}}">Add Watchlist</a>
+            {% endif %}
         {% else %}
-            <a class="watchlist-link" style="padding-left:2.2rem;padding-right:2.2rem;width:auto;" href="{% url 'add_to_watchlist' auction.pk %}?next={{path}}">Add Watchlist</a>
+            <span style="font-size:16px;font-weight:normal"><a href="{% url 'login' %}?next={{request.path}}">Login</a> to add it in the watchlist</span>
         {% endif %}
+ 
     </h1>
         <div style="border: 1px solid rgba(0,0,0,.125);background-color: white;padding:25px 25px;margin-right: 10px;">
             <div id="img-container">

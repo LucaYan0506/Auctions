@@ -15,13 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-
+from django.contrib.sitemaps.views import sitemap
 from django.conf import settings
 from django.conf.urls.static import static
 
+from auctions.sitemap import *
+
+sitemaps = {
+    'static' : StaticViewSitemap,
+    'categorie':CategorieViewSitemap,
+    'listing_page' : Listing_pageViewSitemap
+}
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("auctions.urls"))
+    path("", include("auctions.urls")),
+    path("sitemap.xml",sitemap,{'sitemaps':sitemaps}),
 ]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
